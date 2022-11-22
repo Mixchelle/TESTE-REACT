@@ -5,7 +5,7 @@ import App from '../App';
 import renderWithRouter from '../renderWithRouter';
 import { NotFound } from '../pages';
 
-describe('testando o componete <app />', () => {
+describe('testando o componente <app />', () => {
   const { history } = renderWithRouter(<App />);
   const home = screen.getByRole('link', {
     name: /home/i,
