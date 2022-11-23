@@ -1,17 +1,34 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import App from '../App';
+import userEvent from '@testing-library/user-event';
 import renderWithRouter from '../renderWithRouter';
+import App from '../App';
+import pokemonList from '../data';
 
-describe('teste componente <Pokemon />', () => {
+describe('Teste o componente <Pokedex />', () => {
   test('', () => {
     renderWithRouter(<App />);
-    const poke = screen.getByText(/pikachu/i);
-    const text = screen.getByText(/average weight: 6\.0 kg/i);
-    const btn = screen.getByRole('link', { name: /more details/i });
+    const pokemonName = screen
+      .getByTestId('pokemon-name').innerHTML;
+    const testId = screen.getByTestId('pokemon-type');
+    const pokemonImg = screen.getByRole('img');
+    const pokeList = pokemonList
+      .find((poke) => poke.name === pokemonName);
+    const detailBtn = screen
+      .getByRole('link', { name: /more details/i });
+    expect(pokemonImg.src).toBe(pokeList.image);
+    expect(pokemonImg.alt).toBe(`${pokemonName} sprite`);
 
-    expect(poke).toBeInTheDocument();
-    expect(text).toBeInTheDocument();
-    expect(btn).toBeInTheDocument();
+    userEvent.click(detailBtn);
+    const favorite = screen
+      .getByText(/pokémon favoritado\?/i);
+
+    userEvent.click(favorite);
+    const star = screen
+      .getByRole('img', { name: `${pokemonName} is marked as favorite` });
+    expect(star.src).toBe('http://localhost/star-icon.svg');
+    expect(star.alt).toBe(`${pokemonName} is marked as favorite`);
+    expect(testId).toHaveTextContent(pokeList.type);
+    expect(detailBtn.href).toBe(`http://localhost/pokemon/${pokeList.id}`);
   });
 });
