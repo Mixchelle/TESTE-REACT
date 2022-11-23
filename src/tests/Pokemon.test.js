@@ -1,16 +1,17 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import App from '../App';
 import renderWithRouter from '../renderWithRouter';
-import pokemonList from '../data';
 
 describe('teste componente <Pokemon />', () => {
-test('', () => {
-  renderWithRouter(<App />);
+  test('', () => {
+    renderWithRouter(<App />);
+    const poke = screen.getByText(/pikachu/i);
+    const text = screen.getByText(/average weight: 6\.0 kg/i);
+    const btn = screen.getByRole('link', { name: /more details/i });
 
-test('', () => {
-  renderWithRouter(<App />);
-});
-
+    expect(poke).toBeInTheDocument();
+    expect(text).toBeInTheDocument();
+    expect(btn).toBeInTheDocument();
+  });
 });
